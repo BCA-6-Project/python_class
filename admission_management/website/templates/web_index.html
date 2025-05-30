@@ -1,0 +1,99 @@
+{% extends "master.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: #f0fdf4;
+    margin: 0;
+  }
+
+  nav {
+    background: linear-gradient(to right, #00b09b, #96c93d);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+  }
+
+  nav .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+  }
+
+  nav ul li a:hover {
+    opacity: 0.85;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 60px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+    color: #00b09b;
+    margin-bottom: 30px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #00b09b;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  button:hover {
+    background-color: #028373;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    background: #00b09b;
+    color: white;
+    margin-top: 60px;
+  }
+</style>
+
+{% endblock %}

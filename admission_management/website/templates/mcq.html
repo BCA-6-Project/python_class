@@ -1,0 +1,237 @@
+{% extends "master.html" %} 
+
+{% block title %}MCQ{% endblock %} 
+
+{% block content %}
+
+<style>
+  body {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    background: #f0fdf4;
+  }
+
+  nav {
+    background: linear-gradient(to right, #00b09b, #96c93d);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+  }
+
+  nav .logo {
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 60px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .question-number {
+    font-weight: bold;
+    color: #00b09b;
+    margin-bottom: 15px;
+  }
+
+  .question-text {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+
+  .option {
+    padding: 12px 20px;
+    background: #f7f7f7;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .option:hover,
+  .option.selected {
+    background: #e0ffe9;
+    border-color: #00b09b;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+  }
+
+  .pagination span {
+    font-weight: bold;
+  }
+
+  .pagination button {
+    padding: 10px 20px;
+    background: #00b09b;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .pagination button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+</style>
+
+  <div class="container">
+    <div class="question-number" id="qNumber">Question 1 of 5</div>
+    <div class="question-text" id="qText">Loading question...</div>
+
+    <div id="options"></div>
+
+  <div class="pagination">
+    <button id="prevBtn" onclick="goToPrevious()" disabled>← Previous</button>
+    <span id="paginationStatus">1 / 5</span>
+    <button id="nextBtn" onclick="goToNext()" disabled>Next →</button>
+  </div>
+</div>
+
+<script>
+
+  const questions = {{ mcqData|safe }};
+
+  let current = 0;
+  let userAnswers = new Array(questions.length).fill(null);
+
+  const qText = document.getElementById('qText');
+  const qNumber = document.getElementById('qNumber');
+  const optionsDiv = document.getElementById('options');
+  const paginationStatus = document.getElementById('paginationStatus');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function loadQuestion(index) {
+    const q = questions[index];
+    qNumber.textContent = `Question ${index + 1} of ${questions.length}`;
+    paginationStatus.textContent = `${index + 1} / ${questions.length}`;
+    qText.textContent = q.text;
+
+    optionsDiv.innerHTML = '';
+    q.options.forEach((opt, i) => {
+      const div = document.createElement('div');
+      div.className = 'option';
+      div.textContent = opt;
+      if (userAnswers[index] === i) div.classList.add('selected');
+      div.onclick = () => {
+        userAnswers[index] = i;
+        if (index < questions.length - 1) {
+          current++;
+          loadQuestion(current);
+        } else {
+          localStorage.setItem('userAnswers', JSON.stringify(userAnswers));
+          localStorage.setItem('questions', JSON.stringify(questions));
+
+          finishQuiz();
+          window.location.href = '/result/';
+        }
+      };
+      optionsDiv.appendChild(div);
+    });
+
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = userAnswers[index] === null;
+  }
+
+  function goToPrevious() {
+    if (current > 0) {
+      current--;
+      loadQuestion(current);
+    }
+  }
+
+  function goToNext() {
+    if (current < questions.length - 1) {
+      current++;
+      loadQuestion(current);
+    }
+  }
+
+  loadQuestion(current);
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
+          cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function finishQuiz() {
+    const answers = [];
+
+    for (let i = 0; i < questions.length; i++) {
+      const selectedIndex = userAnswers[i];
+      if (selectedIndex === null) continue;
+
+      const question = questions[i];
+      const selectedOptionText = question.options[selectedIndex];
+
+      answers.push({
+        questionText: question.text,
+        selectedOptionText: selectedOptionText
+      });
+    }
+
+    fetch('/save_mcq/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify({
+        student_id: 1,  // Replace with dynamic ID if available
+        answers: answers
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log('Answers saved:', data);
+      window.location.href = '/result/';
+    });
+  }
+
+  // Replace this inside your option click handler:
+  // window.location.href = 'result.html';
+  // with:
+  // finishQuiz();
+
+  loadQuestion(current);
+</script>
+
+</script>
+
+{% endblock %}

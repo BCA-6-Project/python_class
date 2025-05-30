@@ -1,0 +1,143 @@
+{% extends "master.html" %} 
+
+{% block title %}Verification{% endblock %} 
+
+{% block content %}
+
+<style>
+  body {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    background: #f0fdf4;
+  }
+
+  nav {
+    background: linear-gradient(to right, #00b09b, #96c93d);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+  }
+
+  nav .logo {
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 60px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    text-align: center;
+    color: #00b09b;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    font-size: 1rem;
+    color: #333;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    margin-top: 5px;
+    font-size: 1rem;
+  }
+
+  .form-group button {
+    width: 100%;
+    padding: 12px;
+    background-color: #00b09b;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+
+  .form-group button:hover {
+    background-color: #96c93d;
+  }
+
+  .form-group button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+</style>
+
+<div class="container">
+  <h2>Email Verification</h2>
+
+  <div class="form-group">
+    <label for="email">Enter your Email Address</label>
+    <input type="email" id="email" placeholder="Enter your email" required />
+    <button id="sendOtpBtn" onclick="sendOtp()">Send OTP</button>
+  </div>
+
+  <div id="otpSection" style="display: none">
+    <div class="form-group">
+      <label for="otp">Enter the OTP sent to your email</label>
+      <input type="text" id="otp" placeholder="Enter OTP" required />
+      <button id="verifyOtpBtn" onclick="verifyOtp()">Verify OTP</button>
+    </div>
+  </div>
+
+  <div id="errorMessage" class="error" style="display: none"></div>
+</div>
+
+<script>
+  let sentOtp = null;
+
+  // Function to simulate sending an OTP via email
+  function sendOtp() {
+    const email = document.getElementById("email").value;
+
+    if (email) {
+      // Simulate OTP generation (In real scenario, generate and send OTP via server)
+      sentOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Random 6-digit OTP
+      console.log(`OTP sent to ${email}: ${sentOtp}`); // In a real case, the OTP is sent via email
+      document.getElementById("otpSection").style.display = "block"; // Show OTP input field
+      document.getElementById("sendOtpBtn").disabled = true; // Disable the "Send OTP" button
+    } else {
+      
+    }
+  }
+
+  
+
+  
+</script>
+
+{% endblock %}

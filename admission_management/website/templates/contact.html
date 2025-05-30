@@ -1,0 +1,12 @@
+{% extends "master.html" %}
+
+{% block title %}This is a title page{% endblock %}
+
+{% block web_content %}
+
+this is contact us
+
+<a href="{% url 'web_home_page' %}">Go to Home</a><br><br>
+<a href="{% url 'web_about_us' %}">Go to About Page</a><br>
+
+{% endblock %}
