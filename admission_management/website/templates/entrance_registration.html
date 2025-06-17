@@ -85,10 +85,19 @@
     <div class="logo">College Admission Portal</div>
     <ul>
       <li><a href="{% url 'web_home_page' %}">Home</a></li>
+      {% if not user.is_authenticated %}
       <li><a href="{% url 'web_registration' %}">Register</a></li>
       <li><a href="{% url 'student_verification' %}">Verify</a></li>
+      {% endif %}
+
+      {% if user.is_authenticated %}
       <li><a href="{% url 'mcq' %}">Entrance Test</a></li>
-      <li><a href="{% url 'result' %}">Results</a></li>
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+      {% endif %}
+      <!-- <li><a href="{% url 'result' %}">Results</a></li> -->
     </ul>
   </nav>
 
@@ -106,9 +115,6 @@
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab">Academic Details</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="documents-tab" data-bs-toggle="tab" data-bs-target="#documents" type="button" role="tab">Documents</button>
         </li>
       </ul>
 
@@ -146,6 +152,11 @@
                 </select>
               </div>
             </div>
+
+            <div class="text-end mt-4">
+              <button class="btn btn-primary" type="button" onclick="nextTab('registration')">Next</button>
+            </div>
+
           </div>
 
           <!-- Registration Details -->
@@ -165,6 +176,11 @@
                 <select name="level" id="level_id" class="form-select" required>
                 </select>
               </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <button class="btn btn-secondary" type="button" onclick="prevTab('personal')">Previous</button>
+              <button class="btn btn-primary" type="button" onclick="nextTab('academic')">Next</button>
             </div>
           </div>
 
@@ -197,23 +213,12 @@
                 <input type="text" name="percentage" class="form-control" required>
               </div>
             </div>
-          </div>
 
-          <!-- Document Upload -->
-          <div class="tab-pane fade" id="documents" role="tabpanel">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label>Document Name</label>
-                <!-- <input type="text" name="document_name" class="form-control" required> -->
-              </div>
-              <div class="col-md-6">
-                <label>Attach Document</label>
-                <!-- <input type="file" name="document_attachment" class="form-control" required> -->
-              </div>
+            <div class="d-flex justify-content-between mt-4">
+              <button class="btn btn-secondary" type="button" onclick="prevTab('registration')">Previous</button>
+              <button type="submit" class="btn btn-success">Submit Registration</button>
             </div>
-            <div class="text-end mt-4">
-              <button type="submit" class="btn btn-primary">Submit Registration</button>
-            </div>
+
           </div>
 
         </div>
@@ -223,6 +228,18 @@
 
  
 <script>
+
+  
+  function nextTab(tabId) {
+    const tabTrigger = new bootstrap.Tab(document.querySelector(`#${tabId}-tab`));
+    tabTrigger.show();
+  }
+
+  function prevTab(tabId) {
+    const tabTrigger = new bootstrap.Tab(document.querySelector(`#${tabId}-tab`));
+    tabTrigger.show();
+  }
+
 
   $('#program_id').on('change', function () {
     var categoryId = $(this).val();
@@ -251,6 +268,7 @@
       $('#level_id').empty().append('<option value="" disabled selected>-- No Data Found --</option>');
     }
   });
+
 </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

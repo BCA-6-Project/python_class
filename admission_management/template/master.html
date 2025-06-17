@@ -16,10 +16,23 @@
     <div class="logo">College Admission Portal</div>
     <ul>
       <li><a href="{% url 'web_home_page' %}">Home</a></li>
+      {% if not user.is_authenticated %}
       <li><a href="{% url 'web_registration' %}">Register</a></li>
       <li><a href="{% url 'student_verification' %}">Verify</a></li>
+      {% endif %}
+
+      
+      {% if user.is_authenticated %}
       <li><a href="{% url 'mcq' %}">Entrance Test</a></li>
-      <li><a href="{% url 'result' %}">Results</a></li>
+
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+      {% endif %}
+      <!-- <li><a href="{% url 'result' %}">Results</a></li> -->
+
+      
     </ul>
   </nav>
 

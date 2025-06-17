@@ -8,6 +8,7 @@ class Mcq(models.Model):
     name = models.CharField(max_length=255)
     program = models.ForeignKey(Program, on_delete=models.CASCADE, default=1)
     level = models.ForeignKey(Program_Level, on_delete=models.CASCADE, default=1)
+    difficulty = models.IntegerField(default=1)
     
     class Meta:
         db_table = 'mcq'
