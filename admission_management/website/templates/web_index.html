@@ -1,5 +1,7 @@
 {% extends "master.html" %}
 
+{% load static %}
+
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
@@ -11,6 +13,9 @@
     margin: 0;
   }
 
+  .main{
+    text-align: center;
+  }
   nav {
     background: linear-gradient(to right, #00b09b, #96c93d);
     padding: 1rem 2rem;
@@ -96,4 +101,14 @@
   }
 </style>
 
+<div class="main">
+  <h1>Welcome to the College Admission Portal</h1>
+  <p>
+    Start your admission journey with a streamlined and transparent system for registration,
+    entrance tests, and result tracking.
+  </p>
+
+  <img src="{% static 'img/404/1.svg' %}" alt="Banner" style="max-width: 340px;" class="banner">
+
+</div>
 {% endblock %}
